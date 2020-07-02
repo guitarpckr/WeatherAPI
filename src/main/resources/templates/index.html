@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Weather API</title>
+<link rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+  crossorigin="anonymous">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="bg-light justify-content-center row">
+      <div class="col-md-6 offset-md-2">
+       <h1 class="text-center">Check Weather</h1>
+        <form th:action="@{/}" th:object="${request}" method="post" autocomplete="off">
+          <div class="form-group">
+          	<input type="text" th:field="*{zipCode}" placeholder="Zip Code" class="form-control">
+          	<button class="btn btn-info btn-block" type="submit">Check Weather</button>
+          </div>
+        </form>
+        <span th:if="${data !=null && data.name == 'error'}">Invalid zip code, NO WEATHER FOR YOU!</span>
+        <div th:if="${data != null && data.name != 'error'}">
+         <h1 class="text-center">Weather Conditions For: <span th:text="${data.name}"></span></h1>
+        <p><strong>Temperature: </strong><span th:text="${data.main.get('temp')}"></span> °F</p>
+        <p><strong>High Temperature: </strong><span th:text="${data.main.get('temp_max')}"></span> °F</p>
+        <p><strong>Low Temperature: </strong><span th:text="${data.main.get('temp_min')}"></span> °F</p>
+        <p><strong>Humidity: </strong><span th:text="${data.main.get('humidity')}"></span> %</p>
+        <p><strong>Pressure: </strong><span th:text="${data.main.get('pressure')}"></span></p>
+        <p><strong>Feels like: </strong><span th:text="${data.main.get('feels_like')}"></span> °F</p>
+        <p><strong>Wind speed: </strong><span th:text="${data.wind.get('speed')}"></span> mph</p>
+        <p><strong>Condition: </strong><span th:text="${data.weather[0].get('description')}"></span></p>       
+        <img th:src="@{${'http://openweathermap.org/img/w/' + data.weather[0].get('icon') + '.png'}}"/>
+        </div>
+      </div>
+      <div class="col-md-4">
+      	<h3>Recent Searches</h3>
+      	<ul th:each="zipcode : ${zipcodes}">
+      		<li th:text="${zipcode.zipcode}"></li>    	
+      	</ul>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+</body>
+</html>
